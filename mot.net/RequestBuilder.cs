@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Globalization;
+using System.IO;
+using Newtonsoft.Json;
+using System.Security;
+using System.Runtime.InteropServices;
 
 namespace MOT.NET {
     public interface IRequestBuilder {
@@ -23,6 +27,7 @@ namespace MOT.NET {
 
     public class RequestBuilder : IRequestBuilder, IFetcher {
         private Uri _uri;
+        private SecureString _key;
         private Range<int> _pages = null;
         private string _registration = null;
         private DateTime? _date = null;
@@ -37,8 +42,9 @@ namespace MOT.NET {
             }
         }
 
-        internal RequestBuilder(Uri uri, Range<int> pages = null, string registration = null, DateTime? date = null) {
+        internal RequestBuilder(Uri uri, SecureString key, Range<int> pages = null, string registration = null, DateTime? date = null) {
             _uri = uri;
+            _key = key;
             _pages = pages;
             _registration = registration;
             _date = date;
@@ -70,7 +76,22 @@ namespace MOT.NET {
         }
 
         public async IAsyncEnumerable<IRecord> FetchAsync() {
-            throw new NotImplementedException();
+            IntPtr ptr = Marshal.SecureStringToBSTR(_key);
+            string key = Marshal.PtrToStringBSTR(ptr);
+            JsonSerializer serializer = new JsonSerializer();
+            try {
+                using(HttpClient client = new HttpClient()) {
+                    client.DefaultRequestHeaders.Add("x-api-key", key);
+                    using(Stream response = await client.GetStreamAsync(Build()))
+                        using(StreamReader reader = new StreamReader(response))
+                            using(JsonReader json = new JsonTextReader(reader))
+                                while(await json.ReadAsync())
+                                    if(json.TokenType == JsonToken.StartObject)
+                                        yield return serializer.Deserialize<Record>(json);
+                }
+            } finally {
+                Marshal.ZeroFreeBSTR(ptr);
+            }
         }
 
         public IEnumerable<IRecord> Fetch() {
