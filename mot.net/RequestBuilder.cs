@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text;
+using System.Globalization;
 
 namespace MOT.NET {
     public interface IRequestBuilder {
@@ -23,6 +26,16 @@ namespace MOT.NET {
         private Range<int> _pages = null;
         private string _registration = null;
         private DateTime? _date = null;
+
+        private string QueryString {
+            get {
+                StringBuilder query = new StringBuilder();
+                if(_pages != null) query.Append($"&pages={_pages.ToString()}");
+                if(_registration != null) query.Append($"&registration={_registration}");
+                if(_date != null) query.Append($"&date={_date.Value.ToString("yyyyMMdd", CultureInfo.InvariantCulture)}");
+                return query.Remove(0, 1).ToString();
+            }
+        }
 
         internal RequestBuilder(Uri uri, Range<int> pages = null, string registration = null, DateTime? date = null) {
             _uri = uri;
@@ -48,6 +61,12 @@ namespace MOT.NET {
         public IRequestBuilder Date(DateTime date) {
             _date = date;
             return this;
+        }
+
+        private Uri Build() {
+            UriBuilder builder = new UriBuilder(_uri);
+            builder.Query = QueryString;
+            return builder.Uri;
         }
 
         public async IAsyncEnumerable<IRecord> FetchAsync() {
