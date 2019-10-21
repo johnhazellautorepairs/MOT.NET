@@ -7,6 +7,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Security;
 using System.Runtime.InteropServices;
+using MOT.NET.Models;
 
 namespace MOT.NET {
     public interface IRequestBuilder {
@@ -20,9 +21,7 @@ namespace MOT.NET {
     }
 
     public interface IFetcher {
-        IAsyncEnumerable<IRecord> FetchAsync();
-
-        IEnumerable<IRecord> Fetch();
+        IAsyncEnumerable<Record> FetchAsync();
     }
 
     public class RequestBuilder : IRequestBuilder, IFetcher {
@@ -75,7 +74,7 @@ namespace MOT.NET {
             return builder.Uri;
         }
 
-        public async IAsyncEnumerable<IRecord> FetchAsync() {
+        public async IAsyncEnumerable<Record> FetchAsync() {
             IntPtr ptr = Marshal.SecureStringToBSTR(_key);
             string key = Marshal.PtrToStringBSTR(ptr);
             JsonSerializer serializer = new JsonSerializer();
@@ -92,10 +91,6 @@ namespace MOT.NET {
             } finally {
                 Marshal.ZeroFreeBSTR(ptr);
             }
-        }
-
-        public IEnumerable<IRecord> Fetch() {
-            throw new NotImplementedException();
         }
     }
 }
