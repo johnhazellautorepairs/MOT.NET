@@ -5,8 +5,7 @@ namespace MOT.NET {
     /// Represents a Range of values of type T.
     /// </summary>
     /// <typeparam name="T">The type the Range represents.</typeparam>
-    public interface IRange<T> where T : IComparable
-    {
+    public interface IRange<T> where T : IComparable {
         /// <summary>
         /// Gets the minimum value of the Range<T>.
         /// </summary>
@@ -51,8 +50,7 @@ namespace MOT.NET {
     /// Represents a Range of values of type T.
     /// </summary>
     /// <typeparam name="T">The type the Range represents.</typeparam>
-    public class Range<T> : IRange<T> where T : IComparable
-    {
+    public class Range<T> : IRange<T> where T : IComparable {
         /// <summary>
         /// Gets the minimum value of the Range<T>.
         /// </summary>
@@ -72,7 +70,7 @@ namespace MOT.NET {
         /// <param name="max">The maximum value of the range.</param>
         public Range(T min, T max)
         {
-            if (min.CompareTo(max) < 0)
+            if (min.CompareTo(max) > 0)
                 throw new InvalidRangeException($"`{nameof(max)}` must be larger than or equal to `{nameof(min)}`.");
             Minimum = min;
             Maximum = max;
