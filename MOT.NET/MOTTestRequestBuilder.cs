@@ -11,8 +11,6 @@ using MOT.NET.Models.MOT;
 
 namespace MOT.NET {
     public interface IMOTRequestBuilder : IFetchable<Record> {
-        IMOTRequestBuilder Pages(Range<int> range);
-
         IMOTRequestBuilder Page(int page);
 
         IMOTRequestBuilder Registration(string Registration);
@@ -23,37 +21,30 @@ namespace MOT.NET {
     public class MOTRequestBuilder : IMOTRequestBuilder {
         private Uri _uri;
         private SecureString _key;
-        private Range<int> _pages = null;
+        private int? _page = null;
         private string _registration = null;
         private DateTime? _date = null;
 
         private string QueryString {
             get {
                 StringBuilder query = new StringBuilder();
-                if(_pages != null) query.Append($"&pages={_pages.ToString()}");
+                if(_page != null) query.Append($"&page={_page}");
                 if(_registration != null) query.Append($"&registration={_registration}");
                 if(_date != null) query.Append($"&date={_date.Value.ToString("yyyyMMdd", CultureInfo.InvariantCulture)}");
                 return query.Remove(0, 1).ToString();
             }
         }
 
-        internal MOTRequestBuilder(Uri uri, SecureString key, string path = "/trade/vehicles/mot-tests", Range<int> pages = null, string registration = null, DateTime? date = null) {
+        internal MOTRequestBuilder(Uri uri, SecureString key, string path = "/trade/vehicles/mot-tests") {
             UriBuilder builder = new UriBuilder(uri);
             builder.Path = path;
             _uri = builder.Uri;
             _key = key;
-            _pages = pages;
-            _registration = registration;
-            _date = date;
-        }
-
-        public IMOTRequestBuilder Pages(Range<int> range) {
-            _pages = range;
-            return this;
         }
 
         public IMOTRequestBuilder Page(int page) {
-            return Pages(new Range<int>(page));
+            _page = page;
+            return this;
         }
 
         public IMOTRequestBuilder Registration(string registration) {
@@ -62,9 +53,6 @@ namespace MOT.NET {
         }
 
         public IMOTRequestBuilder Date(DateTime date) {
-            // If page range is unspecified, use 1-1440 (all pages for one day)
-            if(_pages == null)
-                Pages(new Range<int>(1, 1440));
             _date = date;
             return this;
         }
