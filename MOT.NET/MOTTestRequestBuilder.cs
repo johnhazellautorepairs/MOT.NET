@@ -62,6 +62,9 @@ namespace MOT.NET {
         }
 
         public IMOTRequestBuilder Date(DateTime date) {
+            // If page range is unspecified, use 1-1440 (all pages for one day)
+            if(_pages == null)
+                Pages(new Range<int>(1, 1440));
             _date = date;
             return this;
         }
