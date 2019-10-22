@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mot.net", "mot.net\mot.net.csproj", "{BCDBFC79-2E4A-4504-8595-95D40A816E1C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MOT.NET", "MOT.NET\MOT.NET.csproj", "{BCDdBFC79-2E4A-4504-8595-95D40A816E1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
