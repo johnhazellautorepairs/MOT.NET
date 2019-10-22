@@ -76,22 +76,22 @@ namespace MOT.NET {
         }
 
         public async IAsyncEnumerable<Record> FetchAsync() {
-            IntPtr ptr = Marshal.SecureStringToBSTR(_key);
-            string key = Marshal.PtrToStringBSTR(ptr);
             JsonSerializer serializer = new JsonSerializer();
-            try {
-                using(HttpClient client = new HttpClient()) {
-                    client.DefaultRequestHeaders.Add("x-api-key", key);
-                    using(Stream response = await client.GetStreamAsync(Build()))
-                        using(StreamReader reader = new StreamReader(response))
-                            using(JsonReader json = new JsonTextReader(reader))
+            using(HttpClient client = new HttpClient()) {
+                using(SecureStringReader ssr = new SecureStringReader(_key)) {
+                    client.DefaultRequestHeaders.Add("x-api-key", ssr.ToString());
+                    using(Stream response = await client.GetStreamAsync(Build())) {
+                        using(StreamReader reader = new StreamReader(response)) {
+                            using(JsonReader json = new JsonTextReader(reader)) {
                                 while(await json.ReadAsync())
                                     if(json.TokenType == JsonToken.StartObject)
                                         yield return serializer.Deserialize<Record>(json);
+                            }
+                        }
+                    }
                 }
-            } finally {
-                Marshal.ZeroFreeBSTR(ptr);
             }
         }
+
     }
 }
