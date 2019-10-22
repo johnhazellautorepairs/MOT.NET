@@ -2,7 +2,7 @@ using System;
 using System.Security;
 
 namespace MOT.NET {
-    public class Core : IRequestBuilder {
+    public class Core {
         private SecureString _key;
         public Uri Uri { get; }
 
@@ -13,20 +13,12 @@ namespace MOT.NET {
             Uri = uri;
         }
 
-        public IRequestBuilder Pages(Range<int> range) {
-            return new RequestBuilder(Uri, _key, pages: range);
+        public IMOTRequestBuilder MOTs() {
+            return new MOTRequestBuilder(Uri, _key);
         }
 
-        public IRequestBuilder Page(int page) {
-            return Pages(new Range<int>(page));
-        }
-
-        public IRequestBuilder Registration(string registration) {
-            return new RequestBuilder(Uri, _key, registration: registration);
-        }
-
-        public IRequestBuilder Date(DateTime date) {
-            return new RequestBuilder(Uri, _key, date: date);
+        public IMOTRequestBuilder MOTs(string path) {
+            return new MOTRequestBuilder(Uri, _key, path: path);
         }
     }
 }

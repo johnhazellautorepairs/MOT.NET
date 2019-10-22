@@ -10,21 +10,17 @@ using System.Runtime.InteropServices;
 using MOT.NET.Models;
 
 namespace MOT.NET {
-    public interface IRequestBuilder {
-        IRequestBuilder Pages(Range<int> range);
+    public interface IMOTRequestBuilder : IFetchable<Record> {
+        IMOTRequestBuilder Pages(Range<int> range);
 
-        IRequestBuilder Page(int page);
+        IMOTRequestBuilder Page(int page);
 
-        IRequestBuilder Registration(string Registration);
+        IMOTRequestBuilder Registration(string Registration);
 
-        IRequestBuilder Date(DateTime date);
+        IMOTRequestBuilder Date(DateTime date);
     }
 
-    public interface IFetcher {
-        IAsyncEnumerable<Record> FetchAsync();
-    }
-
-    public class RequestBuilder : IRequestBuilder, IFetcher {
+    public class MOTRequestBuilder : IMOTRequestBuilder {
         private Uri _uri;
         private SecureString _key;
         private Range<int> _pages = null;
@@ -41,29 +37,31 @@ namespace MOT.NET {
             }
         }
 
-        internal RequestBuilder(Uri uri, SecureString key, Range<int> pages = null, string registration = null, DateTime? date = null) {
-            _uri = uri;
+        internal MOTRequestBuilder(Uri uri, SecureString key, string path = "/trade/vehicles/mot-tests", Range<int> pages = null, string registration = null, DateTime? date = null) {
+            UriBuilder builder = new UriBuilder(uri);
+            builder.Path = path;
+            _uri = builder.Uri;
             _key = key;
             _pages = pages;
             _registration = registration;
             _date = date;
         }
 
-        public IRequestBuilder Pages(Range<int> range) {
+        public IMOTRequestBuilder Pages(Range<int> range) {
             _pages = range;
             return this;
         }
 
-        public IRequestBuilder Page(int page) {
+        public IMOTRequestBuilder Page(int page) {
             return Pages(new Range<int>(page));
         }
 
-        public IRequestBuilder Registration(string registration) {
+        public IMOTRequestBuilder Registration(string registration) {
             _registration = registration;
             return this;
         }
 
-        public IRequestBuilder Date(DateTime date) {
+        public IMOTRequestBuilder Date(DateTime date) {
             _date = date;
             return this;
         }
