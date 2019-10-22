@@ -65,9 +65,11 @@ namespace MOT.NET {
 
         public async IAsyncEnumerable<Record> FetchAsync() {
             JsonSerializer serializer = new JsonSerializer();
-            using(HttpClient client = new HttpClient()) {
-                using(SecureStringReader ssr = new SecureStringReader(_key)) {
-                    client.DefaultRequestHeaders.Add("x-api-key", ssr.ToString());
+            IntPtr ptr = Marshal.SecureStringToGlobalAllocUnicode(_key);
+            string key = Marshal.PtrToStringUni(ptr);
+            try {
+                using(HttpClient client = new HttpClient()) {
+                    client.DefaultRequestHeaders.Add("x-api-key", key);
                     using(Stream response = await client.GetStreamAsync(Build())) {
                         using(StreamReader reader = new StreamReader(response)) {
                             using(JsonReader json = new JsonTextReader(reader)) {
@@ -78,6 +80,8 @@ namespace MOT.NET {
                         }
                     }
                 }
+            } finally {
+                Marshal.ZeroFreeGlobalAllocUnicode(ptr);
             }
         }
 
