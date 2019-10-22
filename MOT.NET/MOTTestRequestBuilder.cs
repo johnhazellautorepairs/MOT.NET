@@ -7,7 +7,7 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Security;
 using System.Runtime.InteropServices;
-using MOT.NET.Models;
+using MOT.NET.Models.MOT;
 
 namespace MOT.NET {
     public interface IMOTRequestBuilder : IFetchable<Record> {

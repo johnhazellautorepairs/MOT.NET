@@ -1,4 +1,4 @@
-namespace MOT.NET.Models {
+namespace MOT.NET.Models.MOT {
 
     public class ReasonForRejectionAndComments {
         public string Text { get; set; }

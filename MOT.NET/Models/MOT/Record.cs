@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MOT.NET.Json;
 using Newtonsoft.Json;
 
-namespace MOT.NET.Models {
+namespace MOT.NET.Models.MOT {
     public class Record {
         public string Registration { get; set; }
         public string Make { get; set; }
@@ -16,7 +16,7 @@ namespace MOT.NET.Models {
         public DateTime ManufactureDate { get; set; }
         [JsonConverter(typeof(StringIntJsonConverter))]
         public int EngineSize { get; set; }
-        public List<MOTTest> MOTTests { get; set; }
+        public List<Test> MOTTests { get; set; }
         public List<ReasonForRejectionAndComments> RfRAndComments { get; set; }
     }
 }
