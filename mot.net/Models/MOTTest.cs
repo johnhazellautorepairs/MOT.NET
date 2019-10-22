@@ -9,8 +9,8 @@ namespace MOT.NET.Models {
         public DateTime ExpiryDate { get; set; }
         [JsonConverter(typeof(StringIntJsonConverter))]
         public int OdometerValue { get; set; }
-        [JsonConverter(typeof(StringIntJsonConverter))]
-        public int MOTTestNumber { get; set; }
+        [JsonConverter(typeof(StringLongJsonConverter))]
+        public long MOTTestNumber { get; set; }
         public string OdometerResultType { get; set; }
     }
 }
