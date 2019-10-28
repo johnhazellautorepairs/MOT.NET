@@ -15,8 +15,8 @@ namespace MOT.NET {
         public Core(SecureString key) : this(key, new Uri("https://beta.check-mot.service.gov.uk/")) {}
 
         public Core(SecureString key, Uri uri) {
-            _key = key;
-            Uri = uri;
+            _key = key ?? throw new ArgumentNullException(nameof(key));
+            Uri = uri ?? throw new ArgumentNullException(nameof(uri));
         }
 
         public IMOTRequestBuilder MOTs() {
@@ -24,10 +24,14 @@ namespace MOT.NET {
         }
 
         public IMOTRequestBuilder MOTs(string path) {
+            if(path == null)
+                throw new ArgumentNullException(nameof(path));
             return new MOTRequestBuilder(this, Uri, path: path);
         }
 
         internal async IAsyncEnumerable<T> GetManyJsonAsync<T>(Uri uri) {
+            if(uri == null)
+                throw new ArgumentNullException(nameof(uri));
             JsonSerializer serializer = new JsonSerializer();
             IntPtr ptr = Marshal.SecureStringToGlobalAllocUnicode(_key);
             string key = Marshal.PtrToStringUni(ptr);

@@ -31,9 +31,9 @@ namespace MOT.NET {
         }
 
         internal MOTRequestBuilder(Core core, Uri uri, string path = "/trade/vehicles/mot-tests") {
-            UriBuilder builder = new UriBuilder(uri);
-            builder.Path = path;
-            Core = core;
+            UriBuilder builder = new UriBuilder(uri ?? throw new ArgumentNullException(nameof(uri)));
+            builder.Path = path ?? throw new ArgumentNullException(nameof(path));
+            Core = core ?? throw new ArgumentNullException(nameof(core));
             _uri = builder.Uri;
         }
 
@@ -49,7 +49,7 @@ namespace MOT.NET {
                 throw new InvalidParametersException("Registration searches cannot be paginated.");
             if(_date != null)
                 throw new InvalidParametersException("Registration searches cannot be dated.");
-            _registration = registration;
+            _registration = registration ?? throw new ArgumentNullException(nameof(registration));
             return this;
         }
 
