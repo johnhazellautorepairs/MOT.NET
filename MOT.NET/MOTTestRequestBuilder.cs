@@ -19,13 +19,13 @@ namespace MOT.NET {
     }
 
     public class MOTRequestBuilder : IMOTRequestBuilder {
+        public Core Core { get; }
         private Uri _uri;
-        private SecureString _key;
         private int? _page = null;
         private string _registration = null;
         private DateTime? _date = null;
 
-        private string QueryString {
+        private string Query {
             get {
                 StringBuilder query = new StringBuilder();
                 if(_page != null) query.Append($"&page={_page}");
@@ -35,11 +35,11 @@ namespace MOT.NET {
             }
         }
 
-        internal MOTRequestBuilder(Uri uri, SecureString key, string path = "/trade/vehicles/mot-tests") {
+        internal MOTRequestBuilder(Core core, Uri uri, string path = "/trade/vehicles/mot-tests") {
             UriBuilder builder = new UriBuilder(uri);
             builder.Path = path;
+            Core = core;
             _uri = builder.Uri;
-            _key = key;
         }
 
         public IMOTRequestBuilder Page(int page) {
@@ -57,32 +57,10 @@ namespace MOT.NET {
             return this;
         }
 
-        private Uri Build() {
+        public IAsyncEnumerable<Record> FetchAsync() {
             UriBuilder builder = new UriBuilder(_uri);
-            builder.Query = QueryString;
-            return builder.Uri;
-        }
-
-        public async IAsyncEnumerable<Record> FetchAsync() {
-            JsonSerializer serializer = new JsonSerializer();
-            IntPtr ptr = Marshal.SecureStringToGlobalAllocUnicode(_key);
-            string key = Marshal.PtrToStringUni(ptr);
-            try {
-                using(HttpClient client = new HttpClient()) {
-                    client.DefaultRequestHeaders.Add("x-api-key", key);
-                    using(Stream response = await client.GetStreamAsync(Build())) {
-                        using(StreamReader reader = new StreamReader(response)) {
-                            using(JsonReader json = new JsonTextReader(reader)) {
-                                while(await json.ReadAsync())
-                                    if(json.TokenType == JsonToken.StartObject)
-                                        yield return serializer.Deserialize<Record>(json);
-                            }
-                        }
-                    }
-                }
-            } finally {
-                Marshal.ZeroFreeGlobalAllocUnicode(ptr);
-            }
+            builder.Query = Query;
+            return Core.GetManyJsonAsync<Record>(builder.Uri);
         }
 
     }
