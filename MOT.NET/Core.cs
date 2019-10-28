@@ -20,11 +20,11 @@ namespace MOT.NET {
         }
 
         public IMOTRequestBuilder MOTs() {
-            return new MOTRequestBuilder(this, Uri, _key);
+            return new MOTRequestBuilder(this, Uri);
         }
 
         public IMOTRequestBuilder MOTs(string path) {
-            return new MOTRequestBuilder(this, Uri, _key, path: path);
+            return new MOTRequestBuilder(this, Uri, path: path);
         }
 
         internal async IAsyncEnumerable<T> GetManyJsonAsync<T>(Uri uri) {
