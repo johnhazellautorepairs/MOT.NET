@@ -1,12 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Text;
 using System.Globalization;
-using System.IO;
-using Newtonsoft.Json;
-using System.Security;
-using System.Runtime.InteropServices;
 using MOT.NET.Models.MOT;
 
 namespace MOT.NET {
@@ -43,21 +38,31 @@ namespace MOT.NET {
         }
 
         public IMOTRequestBuilder Page(int page) {
+            if(_registration != null)
+                throw new InvalidParametersException("Registration searches cannot be paginated.");
             _page = page;
             return this;
         }
 
         public IMOTRequestBuilder Registration(string registration) {
+            if(_page != null)
+                throw new InvalidParametersException("Registration searches cannot be paginated.");
+            if(_date != null)
+                throw new InvalidParametersException("Registration searches cannot be dated.");
             _registration = registration;
             return this;
         }
 
         public IMOTRequestBuilder Date(DateTime date) {
+            if(_registration != null)
+                throw new InvalidParametersException("Registration searches cannot be dated.");
             _date = date;
             return this;
         }
 
         public IAsyncEnumerable<Record> FetchAsync() {
+            if(_date != null && _page == null)
+                throw new InvalidParametersException("Page must be set when searching by Date.");
             UriBuilder builder = new UriBuilder(_uri);
             builder.Query = Query;
             return Core.GetManyJsonAsync<Record>(builder.Uri);
