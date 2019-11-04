@@ -12,6 +12,12 @@ namespace MOT.NET {
         private HttpClient _client = new HttpClient();
         public Uri Uri { get; }
 
+        #if DEBUG
+        internal Core(SecureString key, HttpMessageHandler handler) : this(key) {
+            _client = new HttpClient(handler);
+        }
+        #endif
+
         public Core(SecureString key) : this(key, new Uri("https://beta.check-mot.service.gov.uk/")) {}
 
         public Core(SecureString key, Uri uri) {
