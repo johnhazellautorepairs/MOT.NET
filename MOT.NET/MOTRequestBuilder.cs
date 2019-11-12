@@ -26,7 +26,7 @@ namespace MOT.NET {
                 if(_page != null) query.Append($"&page={_page}");
                 if(_registration != null) query.Append($"&registration={_registration}");
                 if(_date != null) query.Append($"&date={_date.Value.ToString("yyyyMMdd", CultureInfo.InvariantCulture)}");
-                return query.Remove(0, 1).ToString();
+                return query.Length > 0 ? query.Remove(0, 1).ToString() : string.Empty;
             }
         }
 
