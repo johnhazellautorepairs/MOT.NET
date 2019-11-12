@@ -1,6 +1,9 @@
 using Xunit;
+using System;
 using System.Security;
 using System.Collections.Generic;
+using System.Net.Http;
+using Xunit.Abstractions;
 
 namespace MOT.NET.Tests {
     public class MOTFetchTests {
@@ -12,9 +15,20 @@ namespace MOT.NET.Tests {
         }
 
         [Fact]
-        public void Key_Is_Passed_Into_X_API_Key_Header() {
+        public async void Key_Is_Passed_Into_X_API_Key_Header() {
             const string key = "a";
-            var result = FetchWithKeys(key, key);
+            await foreach(var record in FetchWithKeys(key, key)) {
+                // Do nothing.
+            }
+        }
+
+        [Fact]
+        public void Invalid_Key_Throws_HttpRequestException() {
+            Assert.ThrowsAsync<HttpRequestException>(async () => {
+                await foreach(var record in FetchWithKeys("b", "a")) {
+                    // Do nothing.
+                }
+            });
         }
     }
 }
