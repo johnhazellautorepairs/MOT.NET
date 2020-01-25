@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>1.1.0.0</Version>
+    <Version>1.2.0.0</Version>
     <Authors>Lewis Hazell</Authors>
     <Company>John Hazell Auto Repairs</Company>
     <Product>MOT.NET</Product>
@@ -11,10 +11,10 @@
     <FileVersion>1.2.0.0</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <Description>A .NET library for accessing the DVSA's MOT API.</Description>
-    <Copyright>© 2019 John Hazell Auto Repairs</Copyright>
-    <PackageLicenseUrl>https://www.gnu.org/licenses/lgpl-3.0.txt</PackageLicenseUrl>
+    <Copyright>© 2020 John Hazell Auto Repairs</Copyright>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageProjectUrl></PackageProjectUrl>
-    <PackageIconUrl>Icon URL</PackageIconUrl>
+    <PackageIcon>Icon.png</PackageIcon>
     <RepositoryUrl>https://bitbucket.org/johnhazellautorepairs/mot.net/</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>MOT, DVSA, API, data.gov.uk, vehicle, car</PackageTags>
@@ -29,6 +29,11 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="LICENSE.txt" Pack="true" PackagePath="" />
+    <None Include="Assets\Icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>
