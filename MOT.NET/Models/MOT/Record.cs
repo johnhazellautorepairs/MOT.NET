@@ -11,7 +11,8 @@ namespace MOT.NET.Models.MOT {
         public DateTime FirstUsedDate { get; set; }
         public string FuelType { get; set; }
         public string PrimaryColour { get; set; }
-        public string VehicleId { get; set; }
+        [JsonConverter(typeof(Base64GuidJsonConverter))]
+        public Guid VehicleId { get; set; }
         public DateTime RegistrationDate { get; set; }
         public DateTime ManufactureDate { get; set; }
         [JsonConverter(typeof(StringIntJsonConverter))]
