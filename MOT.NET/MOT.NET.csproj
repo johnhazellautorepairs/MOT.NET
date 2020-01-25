@@ -7,8 +7,8 @@
     <Company>John Hazell Auto Repairs</Company>
     <Product>MOT.NET</Product>
     <PackageId>MOT.NET</PackageId>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <Description>A .NET library for accessing the DVSA's MOT API.</Description>
     <Copyright>© 2019 John Hazell Auto Repairs</Copyright>
