@@ -38,5 +38,15 @@ namespace MOT.NET {
             );
         }
 
+        public static Mock<HttpMessageHandler> SetupRecordResponseMock(string record) {
+            return Setup(
+                (m, c) => {
+                    return new HttpResponseMessage() {
+                        StatusCode = HttpStatusCode.OK,
+                        Content = new StringContent(record)
+                    };
+                }
+            );
+        }
     }
 }
