@@ -10,7 +10,7 @@ using System.Linq;
 using System;
 
 namespace MOT.NET {
-    public static class MOTFetchMocks {
+    public static class MotTestClientFetchMocks {
         private static Mock<HttpMessageHandler> Setup(Func<HttpRequestMessage, CancellationToken, HttpResponseMessage> lambda) {
             Mock<HttpMessageHandler> mock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
             mock
