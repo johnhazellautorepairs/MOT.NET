@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
-using MOT.NET.Models.MOT;
+using MOT.NET.Models;
 
 namespace MOT.NET {
     public interface IMotTestClient : IFetchable<Record> {

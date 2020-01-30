@@ -2,7 +2,7 @@ using System;
 using MOT.NET.Json;
 using Newtonsoft.Json;
 
-namespace MOT.NET.Models.MOT {
+namespace MOT.NET.Models {
     public class Test {
         public DateTime CompletedDate { get; set; }
         public string TestResult { get; set; }

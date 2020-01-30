@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using Newtonsoft.Json;
-using MOT.NET.Models.MOT;
+using MOT.NET.Models;
 
 namespace MOT.NET {
     public class MotTestClient : IMotTestClient, IDisposable {
