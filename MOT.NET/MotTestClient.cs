@@ -98,6 +98,7 @@ namespace MOT.NET {
                         }
                     }
                 }
+                _client.DefaultRequestHeaders.Remove("x-api-key");
             } finally {
                 Marshal.ZeroFreeGlobalAllocUnicode(ptr);
             }
