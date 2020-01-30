@@ -64,9 +64,18 @@ namespace MOT.NET {
             return this;
         }
 
+        public IMotTestClient Clear() {
+            _page = null;
+            _registration = null;
+            _date = null;
+            return this;
+        }
+
         public IAsyncEnumerable<Record> FetchAsync() {
             if(_date != null && _page == null)
                 throw new InvalidParametersException("Page must be set when searching by Date.");
+            if(_date == null && _page == null && _registration == null)
+                throw new InvalidParametersException("At least one parameter must be specified.");
             UriBuilder builder = new UriBuilder(Uri);
             builder.Query = Query;
             return GetManyJsonAsync<Record>(builder.Uri);

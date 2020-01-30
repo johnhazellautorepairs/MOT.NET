@@ -11,5 +11,7 @@ namespace MOT.NET {
         IMotTestClient Registration(string Registration);
 
         IMotTestClient Date(DateTime date);
+
+        IMotTestClient Clear();
     }
 }
