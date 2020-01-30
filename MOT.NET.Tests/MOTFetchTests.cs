@@ -11,11 +11,11 @@ namespace MOT.NET.Tests {
             SecureString ss = new SecureString();
             foreach(char c in key) ss.AppendChar(c);
             ss.MakeReadOnly();
-            return new MotTestClient(ss, MOTFetchMocks.SetupAuthenticationMock(correct).Object).FetchAsync();
+            return new MotTestClient(ss, MOTFetchMocks.SetupAuthenticationMock(correct).Object).Page(1).FetchAsync();
         }
 
         private IAsyncEnumerable<Models.Record> FetchWithResponse(string response) {
-            return new MotTestClient(new SecureString(), MOTFetchMocks.SetupRecordResponseMock(response).Object).FetchAsync();
+            return new MotTestClient(new SecureString(), MOTFetchMocks.SetupRecordResponseMock(response).Object).Page(1).FetchAsync();
         }
 
         [Fact]
