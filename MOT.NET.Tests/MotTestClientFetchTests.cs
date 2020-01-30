@@ -6,7 +6,7 @@ using System.Net.Http;
 using Xunit.Abstractions;
 
 namespace MOT.NET.Tests {
-    public class MOTFetchTests {
+    public class MotTestClientFetchTests {
         private IAsyncEnumerable<Models.Record> FetchWithKeys(string key, string correct) {
             SecureString ss = new SecureString();
             foreach(char c in key) ss.AppendChar(c);
