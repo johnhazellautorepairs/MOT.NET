@@ -2,7 +2,7 @@ using System;
 using Newtonsoft.Json;
 
 namespace MOT.NET.Json {
-    public class Base64GuidJsonConverter : JsonConverter<Guid> {
+    internal class Base64GuidJsonConverter : JsonConverter<Guid> {
         public override Guid ReadJson(JsonReader reader, Type objectType, Guid existingValue, bool hasExistingValue, JsonSerializer serializer) {
             string base64 = reader.Value.ToString().Replace('_', '/').Replace('-', '+');
             byte[] raw = Convert.FromBase64String(base64);
