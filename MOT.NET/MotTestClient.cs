@@ -10,13 +10,21 @@ using Newtonsoft.Json;
 using MOT.NET.Models;
 
 namespace MOT.NET {
+    /// <summary>
+    /// Provides a base class for fetching MOT test records.
+    /// </summary>
     public class MotTestClient : IMotTestClient, IDisposable {
         private SecureString _key;
         private HttpClient _client = new HttpClient();
-        public Uri Uri { get; }
         private int? _page = null;
         private string _registration = null;
         private DateTime? _date = null;
+
+        /// <summary>
+        /// Gets the Uri to be accessed when fetching MOT test data.
+        /// </summary>
+        /// <value>The Uri to be accessed when fetching MOT test data. </value>
+        public Uri Uri { get; }
 
         #if DEBUG
         internal MotTestClient(SecureString key, HttpMessageHandler handler) : this(key) {
@@ -24,8 +32,17 @@ namespace MOT.NET {
         }
         #endif
 
+        /// <summary>
+        /// Constructs a new MotTestClient with a specified API key.
+        /// </summary>
+        /// <param name="key">The API key.</param>
         public MotTestClient(SecureString key) : this(key, new Uri("https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests")) {}
 
+        /// <summary>
+        /// Constructs a new MotTestClient with a specified API key and request URI.
+        /// </summary>
+        /// <param name="key">The API key.</param>
+        /// <param name="uri">The URI to use in place of the standard URI.</param>
         public MotTestClient(SecureString key, Uri uri) {
             _key = key ?? throw new ArgumentNullException(nameof(key));
             Uri = uri ?? throw new ArgumentNullException(nameof(uri));
