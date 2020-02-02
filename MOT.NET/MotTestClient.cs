@@ -14,8 +14,10 @@ namespace MOT.NET {
     /// Provides a base class for fetching MOT test records.
     /// </summary>
     public class MotTestClient : IMotTestClient, IDisposable {
-        private SecureString _key;
-        private HttpClient _client = new HttpClient();
+        private SecureString _key; // API key stored as a SecureString
+        private HttpClient _client = new HttpClient(); // HttpClient to perform requests
+
+        // Parameters
         private int? _page = null;
         private string _registration = null;
         private DateTime? _date = null;
@@ -58,6 +60,11 @@ namespace MOT.NET {
             }
         }
 
+        /// <summary>
+        /// Provides a fluid interface for setting the page parameter in the request.
+        /// </summary>
+        /// <param name="page">The value to set the page parameter to.</param>
+        /// <returns>The current IMotTestClient.</returns>
         public IMotTestClient Page(int page) {
             if(_registration != null)
                 throw new InvalidParametersException("Registration searches cannot be paginated.");
@@ -65,6 +72,11 @@ namespace MOT.NET {
             return this;
         }
 
+        /// <summary>
+        /// Provides a fluid interface for setting the registration parameter in the request.
+        /// </summary>
+        /// <param name="registration">The value to set the registration parameter to.</param>
+        /// <returns>The current IMotTestClient.</returns>
         public IMotTestClient Registration(string registration) {
             if(_page != null)
                 throw new InvalidParametersException("Registration searches cannot be paginated.");
@@ -74,6 +86,12 @@ namespace MOT.NET {
             return this;
         }
 
+        /// <summary>
+        /// Proviees a fluid interface for setting the date parameter in the request.
+        /// </summary>
+        /// <param name="date">The value to set the date parameter to.</param>
+        /// <remarks>Only the Date part of the date parameter shall be used in the request.</remarks>
+        /// <returns>The current IMotTestClient.</returns>
         public IMotTestClient Date(DateTime date) {
             if(_registration != null)
                 throw new InvalidParametersException("Registration searches cannot be dated.");
@@ -81,6 +99,10 @@ namespace MOT.NET {
             return this;
         }
 
+        /// <summary>
+        /// Provides a fluid interface for clearing all parameters in the request.
+        /// </summary>
+        /// <returns>The current IMotTestClient.</returns>
         public IMotTestClient Clear() {
             _page = null;
             _registration = null;
@@ -88,6 +110,10 @@ namespace MOT.NET {
             return this;
         }
 
+        /// <summary>
+        /// Fetches Vehicle records with the given parameters asynchronously
+        /// </summary>
+        /// <returns>An IAsyncEnumerable of Vehicle objects to be processed individually.</returns>
         public IAsyncEnumerable<Vehicle> FetchAsync() {
             if(_date != null && _page == null)
                 throw new InvalidParametersException("Page must be set when searching by Date.");
@@ -124,6 +150,10 @@ namespace MOT.NET {
         #region IDisposable Support
         private bool disposed = false; // To detect redundant calls
 
+        /// <summary>
+        /// Disposes of the underlying HttpClient.
+        /// </summary>
+        /// <param name="disposing">Whether the call is from Dispose (TRUE) or the destructor (FALSE).</param>
         protected virtual void Dispose(bool disposing) {
             if (!disposed) {
                 if (disposing) {
@@ -133,6 +163,9 @@ namespace MOT.NET {
             }
         }
 
+        /// <summary>
+        /// Disposes of the underlying HttpClient.
+        /// </summary>
         public void Dispose() {
             Dispose(true);
         }
