@@ -4,6 +4,9 @@ using MOT.NET.Json;
 using Newtonsoft.Json;
 
 namespace MOT.NET.Models {
+    /// <summary>
+    /// Represents a vehicle record.
+    /// </summary>
     public class Vehicle {
         /// <summary>
         /// Gets the registration of the current Vehicle.
@@ -41,12 +44,12 @@ namespace MOT.NET.Models {
         /// </summary>
         /// <value>The primary colour of the current Vehicle.</value>
         public string PrimaryColour { get; set; }
-        [JsonConverter(typeof(Base64GuidJsonConverter))]
 
         /// <summary>
         /// Gets the unique identifier of the current Vehicle.
         /// </summary>
         /// <value>The unique identifier of the current Vehicle.</value>
+        [JsonConverter(typeof(Base64GuidJsonConverter))]
         public Guid VehicleId { get; set; }
 
         /// <summary>
