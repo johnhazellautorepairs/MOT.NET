@@ -19,6 +19,7 @@
     <RepositoryType>Git</RepositoryType>
     <PackageTags>MOT, DVSA, API, data.gov.uk, vehicle, car</PackageTags>
     <PackageReleaseNotes></PackageReleaseNotes>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
