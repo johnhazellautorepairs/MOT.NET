@@ -4,7 +4,7 @@ using MOT.NET.Json;
 using Newtonsoft.Json;
 
 namespace MOT.NET.Models {
-    public class Record {
+    public class Vehicle {
         public string Registration { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }

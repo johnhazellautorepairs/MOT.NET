@@ -5,7 +5,7 @@ using System.Globalization;
 using MOT.NET.Models;
 
 namespace MOT.NET {
-    public interface IMotTestClient : IFetchable<Record> {
+    public interface IMotTestClient : IFetchable<Vehicle> {
         IMotTestClient Page(int page);
 
         IMotTestClient Registration(string Registration);

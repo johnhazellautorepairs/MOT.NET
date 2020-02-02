@@ -7,14 +7,14 @@ using Xunit.Abstractions;
 
 namespace MOT.NET.Tests {
     public class MotTestClientFetchTests {
-        private IAsyncEnumerable<Models.Record> FetchWithKeys(string key, string correct) {
+        private IAsyncEnumerable<Models.Vehicle> FetchWithKeys(string key, string correct) {
             SecureString ss = new SecureString();
             foreach(char c in key) ss.AppendChar(c);
             ss.MakeReadOnly();
             return new MotTestClient(ss, MotTestClientFetchMocks.SetupAuthenticationMock(correct).Object).Page(1).FetchAsync();
         }
 
-        private IAsyncEnumerable<Models.Record> FetchWithResponse(string response) {
+        private IAsyncEnumerable<Models.Vehicle> FetchWithResponse(string response) {
             return new MotTestClient(new SecureString(), MotTestClientFetchMocks.SetupRecordResponseMock(response).Object).Page(1).FetchAsync();
         }
 
