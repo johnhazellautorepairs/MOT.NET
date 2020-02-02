@@ -135,9 +135,11 @@ namespace MOT.NET {
                 using(Stream response = await _client.GetStreamAsync(uri)) {
                     using(StreamReader reader = new StreamReader(response)) {
                         using(JsonReader json = new JsonTextReader(reader)) {
-                            while(await json.ReadAsync())
-                                if(json.TokenType == JsonToken.StartObject)
+                            while(await json.ReadAsync()) {
+                                if(json.TokenType == JsonToken.StartObject) {
                                     yield return serializer.Deserialize<T>(json);
+                                }
+                            }
                         }
                     }
                 }
