@@ -19,9 +19,9 @@ namespace MOT.NET {
         /// <summary>
         /// Provides a fluid interface for setting the registration parameter in the request.
         /// </summary>
-        /// <param name="Registration">The value to set the registration parameter to.</param>
+        /// <param name="registration">The value to set the registration parameter to.</param>
         /// <returns>The current IMotTestClient.</returns>
-        IMotTestClient Registration(string Registration);
+        IMotTestClient Registration(string registration);
 
         /// <summary>
         /// Proviees a fluid interface for setting the date parameter in the request.
