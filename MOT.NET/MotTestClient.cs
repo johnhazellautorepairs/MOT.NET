@@ -71,14 +71,14 @@ namespace MOT.NET {
             return this;
         }
 
-        public IAsyncEnumerable<Record> FetchAsync() {
+        public IAsyncEnumerable<Vehicle> FetchAsync() {
             if(_date != null && _page == null)
                 throw new InvalidParametersException("Page must be set when searching by Date.");
             if(_date == null && _page == null && _registration == null)
                 throw new InvalidParametersException("At least one parameter must be specified.");
             UriBuilder builder = new UriBuilder(Uri);
             builder.Query = Query;
-            return GetManyJsonAsync<Record>(builder.Uri);
+            return GetManyJsonAsync<Vehicle>(builder.Uri);
         }
 
         internal async IAsyncEnumerable<T> GetManyJsonAsync<T>(Uri uri) {
