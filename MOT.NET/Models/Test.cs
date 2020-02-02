@@ -4,6 +4,9 @@ using MOT.NET.Json;
 using Newtonsoft.Json;
 
 namespace MOT.NET.Models {
+    /// <summary>
+    /// Represents an MOT test record.
+    /// </summary>
     public class Test {
         /// <summary>
         /// Gets the date on which the current Test was completed.
@@ -22,12 +25,12 @@ namespace MOT.NET.Models {
         /// </summary>
         /// <value>The expiry date of the current Test.</value>
         public DateTime ExpiryDate { get; set; }
-        [JsonConverter(typeof(StringIntJsonConverter))]
 
         /// <summary>
         /// Gets the odometer reading of the vehicle during the current test.
         /// </summary>
         /// <value>The odometer reading of the vehicle during the current test.</value>
+        [JsonConverter(typeof(StringIntJsonConverter))]
         public int OdometerValue { get; set; }
 
         /// <summary>
