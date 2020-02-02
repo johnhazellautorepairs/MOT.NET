@@ -29,7 +29,6 @@ namespace MOT.NET.Models {
         /// </summary>
         /// <value>The odometer reading of the vehicle during the current test.</value>
         public int OdometerValue { get; set; }
-        [JsonConverter(typeof(StringLongJsonConverter))]
 
         /// <summary>
         /// Gets the units in which the odometer reading is measured in.
@@ -41,6 +40,7 @@ namespace MOT.NET.Models {
         /// Gets the test number of the current Test.
         /// </summary>
         /// <value>The test number of the current Test.</value>
+        [JsonConverter(typeof(StringLongJsonConverter))]
         public long MOTTestNumber { get; set; }
 
         /// <summary>
