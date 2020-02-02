@@ -70,7 +70,7 @@ namespace MOT.NET {
                 throw new InvalidParametersException("Registration searches cannot be paginated.");
             if(_date != null)
                 throw new InvalidParametersException("Registration searches cannot be dated.");
-            _registration = registration ?? throw new ArgumentNullException(nameof(registration));
+            _registration = registration?.Replace(" ", "") ?? throw new ArgumentNullException(nameof(registration));
             return this;
         }
 
