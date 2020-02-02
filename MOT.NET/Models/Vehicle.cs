@@ -18,6 +18,5 @@ namespace MOT.NET.Models {
         [JsonConverter(typeof(StringIntJsonConverter))]
         public int EngineSize { get; set; }
         public List<Test> MOTTests { get; set; }
-        public List<ReasonForRejectionAndComments> RfRAndComments { get; set; }
     }
 }
