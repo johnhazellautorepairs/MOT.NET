@@ -8,6 +8,8 @@ using System.Security;
 using System.Text;
 using Newtonsoft.Json;
 using MOT.NET.Models;
+using System.Threading.Tasks;
+using System.Net;
 
 namespace MOT.NET {
     /// <summary>
@@ -137,38 +139,39 @@ namespace MOT.NET {
         /// Fetches Vehicle records with the given parameters asynchronously
         /// </summary>
         /// <returns>An IAsyncEnumerable of Vehicle objects to be processed individually.</returns>
-        public IAsyncEnumerable<Vehicle> FetchAsync() {
+        public async IAsyncEnumerable<Vehicle> FetchAsync() {
             if(_date != null && _page == null)
                 throw new InvalidParametersException("Page must be set when searching by Date.");
             if(_date == null && _page == null && _registration == null)
                 throw new InvalidParametersException("At least one parameter must be specified.");
             UriBuilder builder = new UriBuilder(Uri);
             builder.Query = Query;
-            return GetManyJsonAsync<Vehicle>(builder.Uri);
-        }
-
-        internal async IAsyncEnumerable<T> GetManyJsonAsync<T>(Uri uri) {
-            if(uri == null)
-                throw new ArgumentNullException(nameof(uri));
-            JsonSerializer serializer = new JsonSerializer();
             IntPtr ptr = Marshal.SecureStringToGlobalAllocUnicode(_key);
             string key = Marshal.PtrToStringUni(ptr);
             try {
                 _client.DefaultRequestHeaders.Add("x-api-key", key);
-                using(Stream response = await _client.GetStreamAsync(uri)) {
-                    using(StreamReader reader = new StreamReader(response)) {
-                        using(JsonReader json = new JsonTextReader(reader)) {
-                            while(await json.ReadAsync()) {
-                                if(json.TokenType == JsonToken.StartObject) {
-                                    yield return serializer.Deserialize<T>(json);
-                                }
-                            }
-                        }
-                    }
+                var response = await _client.GetAsync(builder.Uri);
+                response.EnsureSuccessStatusCode();
+                using Stream stream = await response.Content.ReadAsStreamAsync();
+                await foreach(var vehicle in StreamJsonAsync<Vehicle>(stream)) {
+                    yield return vehicle;
                 }
-                _client.DefaultRequestHeaders.Remove("x-api-key");
             } finally {
+                _client.DefaultRequestHeaders.Remove("x-api-key");
                 Marshal.ZeroFreeGlobalAllocUnicode(ptr);
+            }
+        }
+
+        internal async IAsyncEnumerable<T> StreamJsonAsync<T>(Stream stream) {
+            if(stream == null)
+                throw new ArgumentNullException(nameof(stream));
+            JsonSerializer serializer = new JsonSerializer();
+            using StreamReader reader = new StreamReader(stream);
+            using JsonReader json = new JsonTextReader(reader);
+            while(await json.ReadAsync()) {
+                if(json.TokenType == JsonToken.StartObject) {
+                    yield return serializer.Deserialize<T>(json);
+                }
             }
         }
 
