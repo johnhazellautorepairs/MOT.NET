@@ -45,5 +45,14 @@ namespace MOT.NET.Tests {
                 Assert.Equal(new Guid("1284d6e5-4c99-2d29-1cc1-aaffc18bcbb8"), record.VehicleId);
             }
         }
+
+        [Fact]
+        public void NoRecordsFoundException_Throws_When_StatusCode_Is_NotFound() {
+            Assert.ThrowsAsync<NoRecordsFoundException>(async () => {
+                await foreach(var record in new MotTestClient(new SecureString(), MotTestClientFetchMocks.SetupNotFoundMock().Object).FetchAsync()) {
+                    // Do nothing.
+                }
+            });
+        }
     }
 }
