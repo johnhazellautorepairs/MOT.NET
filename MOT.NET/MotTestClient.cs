@@ -14,6 +14,7 @@ namespace MOT.NET {
     /// Provides a base class for fetching MOT test records.
     /// </summary>
     public class MotTestClient : IMotTestClient, IDisposable {
+        private static readonly Uri DEFAULT_URI = new Uri("https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests");
         private SecureString _key; // API key stored as a SecureString
         private HttpClient _client = new HttpClient(); // HttpClient to perform requests
 
@@ -35,18 +36,40 @@ namespace MOT.NET {
         #endif
 
         /// <summary>
+        /// Constructs a new MotTestClient with a specified API key, as a SecureString.
+        /// </summary>
+        /// <param name="key">The API key.</param>
+        public MotTestClient(SecureString key) : this(key, DEFAULT_URI) {}
+
+        /// <summary>
+        /// Constructs a new MotTestClient with a specified API key, as a SecureString, and request URI.
+        /// </summary>
+        /// <param name="key">The API key.</param>
+        /// <param name="uri">The URI to use in place of the default URI.</param>
+        public MotTestClient(SecureString key, Uri uri) {
+            _key = key ?? throw new ArgumentNullException(nameof(key));
+            Uri = uri ?? throw new ArgumentNullException(nameof(uri));
+        }
+
+        /// <summary>
         /// Constructs a new MotTestClient with a specified API key.
         /// </summary>
         /// <param name="key">The API key.</param>
-        public MotTestClient(SecureString key) : this(key, new Uri("https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests")) {}
+        public MotTestClient(string key) : this(key, DEFAULT_URI) {}
 
         /// <summary>
-        /// Constructs a new MotTestClient with a specified API key and request URI.
+        /// Constructs a new MotTestClient with a specified API key, as a SecureString, and request URI.
         /// </summary>
         /// <param name="key">The API key.</param>
-        /// <param name="uri">The URI to use in place of the standard URI.</param>
-        public MotTestClient(SecureString key, Uri uri) {
-            _key = key ?? throw new ArgumentNullException(nameof(key));
+        /// <param name="uri">The URI to use in place of the default URI.</param>
+        public MotTestClient(string key, Uri uri) {
+            if(key == null)
+                throw new ArgumentNullException(nameof(key));
+            _key = new SecureString();
+            foreach(var character in key) {
+                _key.AppendChar(character);
+            }
+            _key.MakeReadOnly();
             Uri = uri ?? throw new ArgumentNullException(nameof(uri));
         }
 
