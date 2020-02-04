@@ -49,11 +49,11 @@ namespace MOT.NET {
             );
         }
 
-        public static Mock<HttpMessageHandler> SetupNotFoundMock() {
+        public static Mock<HttpMessageHandler> SetupStatusCodeMock(HttpStatusCode code) {
             return Setup(
                 (m, c) => {
                     return new HttpResponseMessage() {
-                        StatusCode = HttpStatusCode.NotFound
+                        StatusCode = code
                     };
                 }
             );
