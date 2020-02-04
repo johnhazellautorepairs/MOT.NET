@@ -1,6 +1,5 @@
 using System;
 using Xunit;
-using MOT.NET;
 using System.Security;
 
 namespace MOT.NET.Tests {
