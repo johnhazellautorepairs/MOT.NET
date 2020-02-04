@@ -1,5 +1,3 @@
-using System.Security;
-using Xunit;
 using Moq;
 using System.Net.Http;
 using Moq.Protected;
