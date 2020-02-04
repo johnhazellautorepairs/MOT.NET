@@ -4,18 +4,24 @@ using System.Security;
 using System.Collections.Generic;
 using System.Net.Http;
 using Xunit.Abstractions;
+using System.Net;
+using MOT.NET.Models;
 
 namespace MOT.NET.Tests {
     public class MotTestClientFetchTests {
-        private IAsyncEnumerable<Models.Vehicle> FetchWithKeys(string key, string correct) {
+        private IAsyncEnumerable<Vehicle> FetchWithKeys(string key, string correct) {
             SecureString ss = new SecureString();
             foreach(char c in key) ss.AppendChar(c);
             ss.MakeReadOnly();
             return new MotTestClient(ss, MotTestClientFetchMocks.SetupAuthenticationMock(correct).Object).Page(1).FetchAsync();
         }
 
-        private IAsyncEnumerable<Models.Vehicle> FetchWithResponse(string response) {
+        private IAsyncEnumerable<Vehicle> FetchWithResponse(string response) {
             return new MotTestClient(new SecureString(), MotTestClientFetchMocks.SetupRecordResponseMock(response).Object).Page(1).FetchAsync();
+        }
+
+        private IAsyncEnumerable<Vehicle> FetchWithStatusCode(HttpStatusCode code) {
+            return new MotTestClient(new SecureString(), MotTestClientFetchMocks.SetupStatusCodeMock(code).Object).FetchAsync();
         }
 
         [Fact]
@@ -49,7 +55,16 @@ namespace MOT.NET.Tests {
         [Fact]
         public void NoRecordsFoundException_Throws_When_StatusCode_Is_NotFound() {
             Assert.ThrowsAsync<NoRecordsFoundException>(async () => {
-                await foreach(var record in new MotTestClient(new SecureString(), MotTestClientFetchMocks.SetupNotFoundMock().Object).FetchAsync()) {
+                await foreach(var record in FetchWithStatusCode(HttpStatusCode.NotFound)) {
+                    // Do nothing.
+                }
+            });
+        }
+
+        [Fact]
+        public void InvalidApiKeyException_Throws_When_StatusCode_Is_Forbidden() {
+            Assert.ThrowsAsync<InvalidApiKeyException>(async () => {
+                await foreach(var record in FetchWithStatusCode(HttpStatusCode.Forbidden)) {
                     // Do nothing.
                 }
             });
