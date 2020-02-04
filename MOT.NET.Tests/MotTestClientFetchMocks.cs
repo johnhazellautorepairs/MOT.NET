@@ -48,5 +48,15 @@ namespace MOT.NET {
                 }
             );
         }
+
+        public static Mock<HttpMessageHandler> SetupNotFoundMock() {
+            return Setup(
+                (m, c) => {
+                    return new HttpResponseMessage() {
+                        StatusCode = HttpStatusCode.NotFound
+                    };
+                }
+            );
+        }
     }
 }
