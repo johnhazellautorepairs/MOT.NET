@@ -25,7 +25,6 @@ namespace MOT.NET {
         /// </summary>
         /// <param name="message">A message describing the Exception.</param>
         /// <param name="inner">The inner Exception.</param>
-        /// <returns></returns>
         public InvalidParametersException(string message, Exception inner) : base(message, inner) {
         }
     }

@@ -151,10 +151,14 @@ namespace MOT.NET {
             try {
                 _client.DefaultRequestHeaders.Add("x-api-key", key);
                 var response = await _client.GetAsync(builder.Uri);
-                response.EnsureSuccessStatusCode();
-                using Stream stream = await response.Content.ReadAsStreamAsync();
-                await foreach(var vehicle in StreamJsonAsync<Vehicle>(stream)) {
-                    yield return vehicle;
+                if(response.StatusCode == HttpStatusCode.NotFound) {
+                    throw new NoRecordsFoundException("No records were found with the specified parameters.");
+                } else {
+                    response.EnsureSuccessStatusCode();
+                    using Stream stream = await response.Content.ReadAsStreamAsync();
+                    await foreach(var vehicle in StreamJsonAsync<Vehicle>(stream)) {
+                        yield return vehicle;
+                    }
                 }
             } finally {
                 _client.DefaultRequestHeaders.Remove("x-api-key");
