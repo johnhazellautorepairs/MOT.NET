@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using MOT.NET.Models;
 using System.Threading.Tasks;
 using System.Net;
+using System.Linq;
 
 namespace MOT.NET {
     /// <summary>
@@ -75,14 +76,17 @@ namespace MOT.NET {
             Uri = uri ?? throw new ArgumentNullException(nameof(uri));
         }
 
-        private string Query {
-            get {
-                StringBuilder query = new StringBuilder();
-                if(_page != null) query.Append($"&page={_page}");
-                if(_registration != null) query.Append($"&registration={_registration}");
-                if(_date != null) query.Append($"&date={_date.Value.ToString("yyyyMMdd", CultureInfo.InvariantCulture)}");
-                return query.Length > 0 ? query.Remove(0, 1).ToString() : string.Empty;
-            }
+        private HttpRequestMessage BuildRequestMessage(string key) {
+            var ub = new UriBuilder(Uri);
+            var sb = new StringBuilder();
+            if(_page != null) sb.Append($"&page={_page}");
+            if(_registration != null) sb.Append($"&registration={_registration}");
+            if(_date != null) sb.Append($"&date={_date.Value.ToString("yyyyMMdd", CultureInfo.InvariantCulture)}");
+            ub.Query = sb.Length > 0 ? sb.Remove(0, 1).ToString() : string.Empty;
+            var message = new HttpRequestMessage(HttpMethod.Get, ub.Uri);
+            message.Headers.Add("Accept", "application/json+v6");
+            message.Headers.Add("x-api-key", key);
+            return message;
         }
 
         /// <summary>
@@ -144,13 +148,11 @@ namespace MOT.NET {
                 throw new InvalidParametersException("Page must be set when searching by Date.");
             if(_date == null && _page == null && _registration == null)
                 throw new InvalidParametersException("At least one parameter must be specified.");
-            UriBuilder builder = new UriBuilder(Uri);
-            builder.Query = Query;
             IntPtr ptr = Marshal.SecureStringToGlobalAllocUnicode(_key);
             string key = Marshal.PtrToStringUni(ptr);
+            var message = BuildRequestMessage(key);
             try {
-                _client.DefaultRequestHeaders.Add("x-api-key", key);
-                var response = await _client.GetAsync(builder.Uri);
+                var response = await _client.SendAsync(message);
                 switch(response.StatusCode) {
                     case HttpStatusCode.NotFound:
                         throw new NoRecordsFoundException("No records were found with the specified parameters.");
@@ -166,7 +168,7 @@ namespace MOT.NET {
                         break;
                 }
             } finally {
-                _client.DefaultRequestHeaders.Remove("x-api-key");
+                message.Headers.Remove("x-api-key");
                 Marshal.ZeroFreeGlobalAllocUnicode(ptr);
             }
         }
