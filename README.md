@@ -15,21 +15,16 @@ Install the package by running:
 `dotnet add package MOT.NET`
 
 ## Setup
-`MotTestClient` takes an API key as a `SecureString`. The example below shows converting a regular `string` to a `SecureString` to construct a `MotTestClient`:
+`MotTestClient` requires an API key, specify it in the constructor as follows:
 ```csharp
 // Example API key, replace with yours. Keep it secret!
 var apikey = "foobar";
 
-// Load the API key into a SecureString.
-var securekey = new SecureString();
-foreach(var character in apikey) {
-    securekey.AppendChar(character);
-}
-securekey.MakeReadOnly();
-
 // Initialise the MotTestClient.
-IMotTestClient client = new MotTestClient(securekey);
+IMotTestClient client = new MotTestClient(apikey);
 ```
+
+If you prefer, you can provide the API key as a [`SecureString`](https://docs.microsoft.com/en-us/dotnet/api/system.security.securestring).
 
 ## Queries
 Once initialised, the library may query the API in three different ways:
@@ -98,7 +93,7 @@ Some API error responses are represented by exceptions to improve usability. The
 
 These are `NoRecordsFoundException`; thrown when no records are found for the given parameters and `InvalidApiKeyException`; thrown when the specified API key is not accepted by the API service.
 
-`FetchAsync` throws `HttpResponseException` for all other response codes (except 200).
+`FetchAsync` throws [`HttpResponseException`](https://docs.microsoft.com/en-us/dotnet/api/system.web.http.httpresponseexception) for all other response codes (except 200).
 
 # Thanks!
 Your usage and support is greatly appreciated.
