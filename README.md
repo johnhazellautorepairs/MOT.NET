@@ -93,5 +93,12 @@ Conversely, the `Date` parameter may not be used on its own and must be used wit
 
 The library will throw an `InvalidParametersException` when parameters are combined in any way  which the API will not accept.
 
+## Exceptions
+Some API error responses are represented by exceptions to improve usability. These are thrown by `FetchAsync`.
+
+These are `NoRecordsFoundException`; thrown when no records are found for the given parameters and `InvalidApiKeyException`; thrown when the specified API key is not accepted by the API service.
+
+`FetchAsync` throws `HttpResponseException` for all other response codes (except 200).
+
 # Thanks!
 Your usage and support is greatly appreciated.
