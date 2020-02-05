@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>2.0.0.0</Version>
+    <Version>2.1.0.0</Version>
     <Authors>John Hazell Auto Repairs</Authors>
     <Company>John Hazell Auto Repairs</Company>
     <Product>MOT.NET</Product>
     <PackageId>MOT.NET</PackageId>
-    <AssemblyVersion>2.0.0.0</AssemblyVersion>
-    <FileVersion>2.0.0.0</FileVersion>
+    <AssemblyVersion>2.1.0.0</AssemblyVersion>
+    <FileVersion>2.1.0.0</FileVersion>
     <NeutralLanguage>en</NeutralLanguage>
     <Description>A .NET library for accessing the DVSA's MOT API.</Description>
     <Copyright>© 2020 John Hazell Auto Repairs</Copyright>
